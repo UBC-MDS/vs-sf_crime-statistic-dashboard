@@ -1,0 +1,67 @@
+---
+title: "A graph"
+author: "Polina Romanchenko"
+date: "05 12 2019"
+output: 
+      github_document: 
+        pandoc_arg: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(anytime)
+library(lubridate)
+library(wesanderson)
+```
+
+```{r Load data, message=FALSE}
+
+df <- read.csv("data/Police_Department_Incidents_-_Previous_Year__2016_.csv")
+drop_na(df)
+```
+
+```{r Wrangle}
+#Changing the formats
+df <- separate(df, 'Date', 'Date', sep = " ") 
+df$Date <- mdy(df$Date)
+df$Hour <- hm(df$Time) %>% hour()
+#df <- separate(df, Time, c('Hour', 'Min', 'Sec'), sep = ' ')
+#head(df)
+
+#Filtering 4 top crimes
+df_4 <- filter(df, Category %in% c('ASSAULT', 'VANDALISM', 'VEHICLE THEFT', 'LARCENY/THEFT'))
+df_4
+```
+
+```{r Plot}
+#library(wesanderson)
+#ldpal <- wes_palette("FantasticFox1", n =4, type = 'continuous')
+
+my_plot <- ggplot(df_4, aes(Category, color = Category)) +
+              geom_bar(stat='count') +
+              labs(x = 'Category of crime',
+                   y = 'Aggregated count of crimes') +
+              ggtitle('Crime occurrences for top 4 crimes') +
+              theme(plot.title = element_text(size = 20, face = "bold"),
+                    axis.title=element_text(size=12))
+      
+my_plot
+```
+
+
+```{r Just a trial plot for the time series}
+df_4 %>% 
+    group_by(Hour) %>%
+    summarize(cnt = n()) %>%
+    ggplot(aes(Hour, y = cnt)) +
+      geom_line(stat = 'identity')
+```
+
+
+
+
+
+
+
