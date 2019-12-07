@@ -16,20 +16,20 @@ Due to the lack of designers in our team, users can observe that overall showcas
 
 For milestone three, we decided to make a few changes to our python app.
 
-The first change we made is to change the descirption of our app which appears in the app interface shorter. We choose to prioritize this because it is first very easy to change and we realize that the previous description is unnecessarily long and not fundamental for the users to read in order to use the app.
+The first change we made is to shorten text of the app description. We choose to prioritize this because it is first easy to change and we realize that the previous description is unnecessarily long and not fundamental for the users to read in order to use the app.
 [This is the link to description update issue](https://github.com/UBC-MDS/Victorious_Secret_DSCI_532/issues/40)
 
-The second change is to add a plot title for the bottom two graphs. We choose to prioritize this because it is first very easy to change and it really helps to clarify the graph. 
+The second change is to add a plot title for the bottom two graphs. We choose to prioritize this because it is first easy to change and it really helps to clarify the graph. 
 [This is the link to title issue](https://github.com/UBC-MDS/Victorious_Secret_DSCI_532/issues/42)
 
-The third change we made is to change the font size of labels. Again we choose to do this because it can improve the interface of the app a lot without casuing too much time.
+The third change we made is to change the font size of labels. Again we choose to do this because it can improve the interface of the app with little time commitment.
 [This is the link to font issue](https://github.com/UBC-MDS/Victorious_Secret_DSCI_532/issues/41)
 
 
-The fifth change is that we modularized our code. We choose to prioritize this because it is easier to debug and we can reuse the code later if we choose because we keep different modules separate. Even though our current app is not very complex, modularizing our code still add readability.
+The fifth change is that we modularized our code. We chose to prioritize this because it is easier to debug and the code can be reused the code later if we choose because we keep different modules separate. Even though our current app is not very complex, modularizing our code improves readability.
 [This is the link to the github issue for modulariztion update](https://github.com/UBC-MDS/Victorious_Secret_DSCI_532/issues/32)
 
-The sixth change is that we add docstring to our function. We choose to prioritize this because it will help users easier to understand what a function is doing. We consider it as necessary especially it can help someone who have not use dash before to understand our code.
+The sixth change is that we added docstrings to our plotting functions. We choose to prioritize this because it would help future collaborators  understand what a function is doing. We consider it necessary as it can help someone who has not used dash before to understand our code.
 [This is the link to the github issue for docstring update](https://github.com/UBC-MDS/Victorious_Secret_DSCI_532/issues/33)
 
 Feedback received:
@@ -38,7 +38,8 @@ Generally there are two types of feedback. One type is regarding to the style of
 
 
 Reflection on feedback:
-It appears that most part of our app are very clear and easy to use. The only problem they encounter when using it is for the dash dropdown right below the description of the app. Beucase of its location, user are not sure which plot it controls. 
-One thing we get across different reviwer is that we are lacking a title. While we do design to have a title, because it is not placed at the center of the app interface, it looks like a normal text.
-For the time constrain, we decided to change the elements that is easy to change but can improve the interface a lot and makes the plot more clear like adding title, changing font size, changing app description.
-For advise like change the bar chart to a line chart, we will explore it for R plot because it will require us to re-wrangle our data which is time consuming. There are some advise that is technically impossible to achieve like change the slider name and add name to altair dropdown. This is because altair does not give up the option to define the name oursleves. 
+It appears that our app is mostly clear and easy to use. The only problem they encounter when using it is for the dash dropdown right below the description of the app. Beucase of its location, user are not sure which plot it controls. 
+Multiple reviewers commented on our lack of a bold app heading. We included an app heading, but because it is not placed at the center of the app interface, users did not perceive this as a title since it looks like normal text.
+Due to the time constraints, we decided to change the elements that are easy to fixes and improve the interface by making the plots more clear. This includes adding titles, changing font size and changing the app description.
+
+We will explore changing plot types in the R iteration of this app since this change requires data wrangling, which is a big time commitment. Other suggestions are technically impossible to achieve since they are built into Altair like changing slider and drop down names. We will also attempt to incorporate layout suggestions in the DashR version of the app. 
