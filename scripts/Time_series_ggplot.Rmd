@@ -44,7 +44,7 @@ my_plot <- ggplot(df_4, aes(Category, color = Category)) +
               labs(x = 'Category of crime',
                    y = 'Aggregated count of crimes') +
               ggtitle('Crime occurrences for top 4 crimes') +
-              theme(plot.title = element_text(size = 16),
+              theme(plot.title = element_text(size = 20, face = "bold"),
                     axis.title=element_text(size=12))
       
 my_plot
