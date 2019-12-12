@@ -8,10 +8,12 @@ library(anytime)
 library(lubridate)
 library(dplyr)
 
-app <- Dash$new(external_stylesheets = "https://codepen.io/chriddyp/pen/bWLwgP.css")
+
+##### initialize the app #####
+app <- Dash$new()
 
 # load in the crime data
-df <- read_csv('documents/mds_532/vs-sf_crime-statistic-dashboard/data/Police_Department_Incidents_-_Previous_Year__2016_.csv')
+df <- read_csv('data/Police_Department_Incidents_-_Previous_Year__2016_.csv')
 
 
 # filter the data to the top 4 crimes 
@@ -23,29 +25,35 @@ top4_df <- df %>%
              Category == 'VEHICLE THEFT')
 
 # create a frequency table for the crimes in each neighborhood
-neighborhood_freq <- as.data.frame(table(top4_df$PdDistrict))
+neighborhood_freq <- as.data.frame(table(top4_df$PdDistrict)) %>% 
+  mutate(Var1 = fct_reorder(as.factor(Var1), Freq, .desc = TRUE))
 colnames(neighborhood_freq) <- c('neighborhood', 'Freq')
 
 hourMarks <- map(list(0, 23), as.character)
 hourSlider <- dccRangeSlider(
-  # TODO: Add id to component
+  id='hour-slider',
   marks = hourMarks,
   min = 0,
   max = 23,
   step=1,
-  value = list(0, 23)
+  value = list(0, 23),
+  className="dcc_control"
+)
+
+# store the crime categories for drop down
+crime_options <- list(
+      list(label = 'ASSAULT', value = 'default'),
+      list(label = 'LARCENY/THEFT', value = 'LARCENY/THEFT'),
+      list(label = 'VEHICLE THEFT', value = 'VEHICLE THEFT'),
+      list(label = 'VANDALISM', value = 'VANDALISM')
 )
 
 crimeDropdown <- dccDropdown(
-            
-      options=list(
-    list(label = "Assault", value = "ASSAULT"),
-    list(label = "Larceny/theft", value = "LARCENY/THEFT"),
-    list(label = "Vandalism", value = "VANDALISM"),
-    list(label = "Vehicle theft", value = "VEHICLE THEFT")
-  ),
+  id='crime-dropdown',
+  options=crime_options,
   value = " ASSAULT",
-  multi = TRUE
+  multi = TRUE,
+  className = 'dcc_control'
 )
 
 regionDropdown <- dccDropdown(
@@ -62,14 +70,14 @@ regionDropdown <- dccDropdown(
 
 # make the frequency chart for crime over neighborhood
 # note: static plot is counts of all 4 crimes together for each neighborhood
-bar_chart <- neighborhood_freq %>% 
-      ggplot(aes(x = reorder(neighborhood, -neighborhood_freq$Freq), y = Freq, fill = neighborhood)) + 
+bar_plot <- neighborhood_freq %>% 
+      ggplot(aes(x = neighborhood, y = Freq, fill = neighborhood)) + 
       geom_col() +
       labs(title = "Distribution of Crime Reports Across Neighborhood",
            x = "Neighborhood",
            y = 'Count of Report') + 
       theme(legend.position = 'none',
-            title = element_text(size = 14),
+            title = element_text(size = 12),
             axis.title = element_text(size = 14),
             axis.text = element_text(size = 6)) + 
       scale_fill_brewer(palette = 'Spectral')
@@ -81,17 +89,17 @@ bar_chart <- neighborhood_freq %>%
 
 map_plot <- top4_df %>% 
       ggplot(aes(x = X, y = Y, color = PdDistrict)) +
-      geom_point(size = 0.07) +
+      geom_point(size = 0.02) +
       labs(title = 'Crime Density Across Neighborhoods',
            x = "Longitude",
            y = "Latitude") + 
       guides(color =guide_legend(title = "Neighborhood",
                                  size = 12,
                                  override.aes = list(size=5))) + 
-      theme(title = element_text(size = 16),
+      theme(title = element_text(size = 14),
             axis.title = element_text(size = 14),
-            axis.text = element_text(size = 14),
-            legend.text = element_text(size = 12)) + 
+            axis.text = element_text(size = 10),
+            legend.text = element_text(size = 10)) + 
    scale_colour_brewer(palette = 'Spectral')
             
                
@@ -103,43 +111,157 @@ df_4 <- filter(df, Category %in% c('ASSAULT', 'VANDALISM', 'VEHICLE THEFT', 'LAR
 
 time_plot <- ggplot(df_4, aes(Category, color = Category)) +
               geom_bar(stat='count') +
-              labs(x = 'Category of crime',
-                   y = 'Aggregated count of crimes') +
-              ggtitle('Crime occurrences for top 4 crimes') +
-              theme(plot.title = element_text(size = 16),
-                    axis.title=element_text(size=12))
+              labs(x = 'Crime Type',
+                   y = 'Aggregated Crime Count') +
+              ggtitle('Crime Occurrences for Top 4 Crimes') +
+              theme(plot.title = element_text(size = 14),
+                    axis.title=element_text(size=12),
+                    legend.position = 'none') + 
+              scale_colour_brewer(palette = 'Spectral')
 
 
 graph1<- dccGraph(
-  id = 'gap-graph',
+  id = 'map-graph',
   figure=ggplotly(map_plot)
    # gets initial data using argument defaults
 )
 
 graph2<- dccGraph(
   id = 'bar-graph',
-  figure=ggplotly(bar_chart)
+  figure=ggplotly(bar_plot)
    # gets initial data using argument defaults
 )
 
 graph3<- dccGraph(
-  id = 'time-graph',
+  id = 'hourly-graph',
   figure=ggplotly(time_plot)
    # gets initial data using argument defaults
 )
 
 app$layout(
   htmlDiv(
-    list( 
-          hourSlider,
-          graph1,
-          graph2,
-          graph3,
-          crimeDropdown,
-          regionDropdown
+    list(
+
+# page header components
+      htmlDiv(list(
+
+            htmlDiv(
+                  list(
+                        htmlImg(
+                              src="/assets/mds_img.png",
+                              id="mds-image",
+                              style=list(
+                                    "height"= "60px",
+                                    "width"= "auto",
+                                    "margin-bottom"= "25px"
+                                     )
+
+                        )),
+                   className="one-third column"
+            ),
+
+
+         htmlDiv(
+          list(
+            htmlDiv(
+              list(
+                htmlH3(
+                  "San Francisco Crime Rates",
+                  style=list("margin-bottom"= "0px")
+                ),
+                htmlH5(
+                  "Incidents for 2016", style=list("margin-top"= "0px")
+                )
+              )
+            )
+          ),
+          className="one-half column",
+          id="title"
+        ),
+
+        htmlDiv(
+          list(
+            htmlA(
+              htmlButton("Data Source", id="data-source-button"),
+              href="https://www.kaggle.com/roshansharma/sanfranciso-crime-dataset"
+            )
+          ),
+          className="one-third column",
+          id="button"
+        )
+
+      ), # end of header components list
+
+      id="header",
+      className="row flex-display",
+      style=list("margin-bottom"= "25px")
+
+      ),
+      # end of page header div container
+
+
+      htmlDiv(list( # start of top row 
+
+            # start of the control panel 
+            htmlDiv(
+            list(
+                  htmlP(
+                  "Filter by Hour of the Day:",
+                  className="control_label"
+                  ),
+                  hourSlider,
+                  htmlP("Filter by Crime Category:", className="control_label"),
+                  crimeDropdown
+
+
+            ),
+            className="pretty_container four columns",
+            id="cross-filter-options"
+      ), # end of the control panel 
+
+      htmlDiv(list(
+
+            htmlDiv(
+              list(graph3),
+              id="countGraphContainer",
+              className="pretty_container"
+            )
+
+      
+      ),
+      id="right-column",
+      className="eight columns")
+
+),
+
+className="row flex-display"
+
+ ),
+
+
+# start of 2nd row of graphs 
+ htmlDiv(
+      list(
+        htmlDiv(
+          list(graph2),
+          className="pretty_container six columns"
+        ),
+        htmlDiv(
+          list(graph1),
+          className="pretty_container six columns"
+        )
+      ),
+      className="row flex-display"
     )
-  )
-) 
+  
+
+
+),
+id="mainContainer",
+style=list("display"= "flex", "flex-direction"= "column") 
+)
+
+)
   
 
 app$run_server()
