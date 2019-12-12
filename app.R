@@ -7,6 +7,7 @@ library(plotly)
 library(anytime)
 library(lubridate)
 library(dplyr)
+library(wesanderson)
 
 
 ##### initialize the app #####
@@ -108,15 +109,15 @@ df$Hour <- hm(df$Time) %>% hour()
 
 df_4 <- filter(df, Category %in% c('ASSAULT', 'VANDALISM', 'VEHICLE THEFT', 'LARCENY/THEFT'))
 
-time_plot <- ggplot(df_4, aes(Category, color = Category)) +
-              geom_bar(stat='count') +
+time_plot <- ggplot(df_4, aes(Category)) +
+              geom_bar(stat='count', aes(fill = Category)) +
               labs(x = 'Crime Type',
                    y = 'Aggregated Crime Count') +
               ggtitle('Crime Occurrences for Top 4 Crimes') +
               theme(plot.title = element_text(size = 14),
                     axis.title=element_text(size=12),
                     legend.position = 'none') + 
-              scale_colour_brewer(palette = 'Spectral')
+              scale_fill_manual(values = wes_palette("Moonrise2", n = 4))
 
 
 graph1<- dccGraph(
