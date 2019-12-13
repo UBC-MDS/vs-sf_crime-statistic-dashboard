@@ -7,7 +7,7 @@ library(plotly)
 library(anytime)
 library(lubridate)
 library(dplyr)
-
+library(wesanderson)
 
 ##### initialize the app #####
 app <- Dash$new()
@@ -29,14 +29,13 @@ neighborhood_freq <- as.data.frame(table(top4_df$PdDistrict)) %>%
   mutate(Var1 = fct_reorder(as.factor(Var1), Freq, .desc = TRUE))
 colnames(neighborhood_freq) <- c('neighborhood', 'Freq')
 
-hourMarks <- map(list(0, 23), as.character)
+hourMarks <- map(seq(0, 23, 1), as.character)
 hourSlider <- dccRangeSlider(
   id='hour-slider',
   marks = hourMarks,
   min = 0,
   max = 23,
   step=1,
-  value = list(0, 23),
   className="dcc_control"
 )
 
@@ -100,7 +99,7 @@ map_plot <- top4_df %>%
             axis.title = element_text(size = 14),
             axis.text = element_text(size = 10),
             legend.text = element_text(size = 10)) + 
-   scale_colour_brewer(palette = 'Spectral')
+              scale_fill_manual(values = wes_palette("Moonrise2", n = 4)
             
                
 df <- separate(df, 'Date', 'Date', sep = " ") 
