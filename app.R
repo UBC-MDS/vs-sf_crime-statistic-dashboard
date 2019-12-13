@@ -199,8 +199,8 @@ app$layout(
       ),
       # end of page header div container
 
-
-      htmlDiv(list( # start of top row 
+      # start of top row 
+      htmlDiv(list( 
 
             # start of the control panel 
             htmlDiv(
@@ -230,7 +230,7 @@ app$layout(
       
       ),
       id="right-column",
-      className="eight columns")
+      className="eight columns") # end of the top row: control panel + time series
 
 ),
 
