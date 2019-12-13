@@ -99,7 +99,7 @@ map_plot <- top4_df %>%
             axis.title = element_text(size = 14),
             axis.text = element_text(size = 10),
             legend.text = element_text(size = 10)) + 
-              scale_fill_manual(values = wes_palette("Moonrise2", n = 4)
+              scale_fill_manual(values = wes_palette("Moonrise2", n = 4))
             
                
 df <- separate(df, 'Date', 'Date', sep = " ") 
