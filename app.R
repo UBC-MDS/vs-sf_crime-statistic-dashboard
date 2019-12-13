@@ -99,7 +99,8 @@ map_plot <- top4_df %>%
             axis.title = element_text(size = 14),
             axis.text = element_text(size = 10),
             legend.text = element_text(size = 10)) + 
-              scale_fill_manual(values = wes_palette("Moonrise2", n = 4)
+            scale_colour_brewer(palette = 'Spectral')
+        
             
                
 df <- separate(df, 'Date', 'Date', sep = " ") 
@@ -108,15 +109,16 @@ df$Hour <- hm(df$Time) %>% hour()
 
 df_4 <- filter(df, Category %in% c('ASSAULT', 'VANDALISM', 'VEHICLE THEFT', 'LARCENY/THEFT'))
 
-time_plot <- ggplot(df_4, aes(Category, color = Category)) +
-              geom_bar(stat='count') +
+time_plot <- ggplot(df_4, aes(Category)) +
+              geom_bar(stat='count', aes(fill=Category)) +
               labs(x = 'Crime Type',
                    y = 'Aggregated Crime Count') +
               ggtitle('Crime Occurrences for Top 4 Crimes') +
               theme(plot.title = element_text(size = 14),
                     axis.title=element_text(size=12),
                     legend.position = 'none') + 
-              scale_colour_brewer(palette = 'Spectral')
+              scale_fill_manual(values = wes_palette("Darjeeling1", n = 4))
+              
 
 
 graph1<- dccGraph(
@@ -198,8 +200,8 @@ app$layout(
       ),
       # end of page header div container
 
-
-      htmlDiv(list( # start of top row 
+      # start of top row 
+      htmlDiv(list( 
 
             # start of the control panel 
             htmlDiv(
@@ -229,7 +231,7 @@ app$layout(
       
       ),
       id="right-column",
-      className="eight columns")
+      className="eight columns") # end of the top row: control panel + time series
 
 ),
 
