@@ -16,7 +16,7 @@ path_data <- paste0(cwd,'/data/Police_Department_Incidents_-_Previous_Year__2016
 app <- Dash$new()
 
 # load in the crime data
-df <- read_csv('data/Police_Department_Incidents_-_Previous_Year__2016_.csv')
+df <- read_csv(path_data)
 # create factors
 # df$Category <- df$Category %>% as.factor()
 # create hour column
