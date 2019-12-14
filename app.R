@@ -10,13 +10,13 @@ library(dplyr)
 library(wesanderson)
 
 # get cwd
-cwd <- getwd()
-path_data <- paste0(cwd,'data/Police_Department_Incidents_-_Previous_Year__2016_.csv')
+# cwd <- getwd()
+# path_data <- paste0(cwd,'data/Police_Department_Incidents_-_Previous_Year__2016_.csv')
 ##### initialize the app #####
 app <- Dash$new()
 
 # load in the crime data
-df <- read_csv(path_data)
+df <- read_csv("https://raw.githubusercontent.com/anasm-17/vs-sf_crime-statistic-dashboard/master/data/Police_Department_Incidents_-_Previous_Year__2016_.csv")
 # create factors
 # df$Category <- df$Category %>% as.factor()
 # create hour column
