@@ -9,6 +9,9 @@ library(lubridate)
 library(dplyr)
 library(wesanderson)
 
+# get cwd
+cwd <- getwd()
+path_data <- paste0(cwd,'/data/Police_Department_Incidents_-_Previous_Year__2016_.csv')
 ##### initialize the app #####
 app <- Dash$new()
 
