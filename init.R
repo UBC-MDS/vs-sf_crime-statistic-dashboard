@@ -56,3 +56,6 @@ remotes::install_github("plotly/dashR", ref="dev", dependencies=FALSE)
 
 # visualization
 install.packages("wesanderson")
+
+# tidyverse
+install.packages("tidyverse")
