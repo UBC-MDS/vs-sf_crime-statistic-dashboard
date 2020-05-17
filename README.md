@@ -9,6 +9,8 @@ Group Members:
 - Polina Romanchenko
 - Xinwen Wang
 
+[Link to app on Dash](https://vs-sf-crime-analyzer-r.herokuapp.com/)
+
 # App Description Python
 
 The app contains two panels. The top panel displays the overall distribution of crime frequency in San Francisco at certain time points. There are two drop down bars to specify crime information: one for choosing the crime type, another for choosing the neighborhood. Users can adjust the Time of Day with a slider to view frequency of crimes over time. The bottom panel contains two graphs to display specific crime information that users want to focus on. The left graph is a bar chart for the crime frequency at a specific time point in neighborhoods specified by the user. The right graph displays a point for an incidence of a crime at a specific location, color coded by neighborhood. The density of the points results in map of San Francisco. Filtering by neighborhood, the user can highlight the points of their choice, leaving the rest of the points greyed out.
